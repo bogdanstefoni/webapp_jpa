@@ -1,95 +1,87 @@
 package com.bogdan.webapp.controller;
 
-import com.bogdan.webapp.entity.Student;
-import com.bogdan.webapp.service.StudentService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
-
-import javax.validation.Valid;
 import java.util.List;
 
+import javax.validation.Valid;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.bogdan.webapp.entity.Student;
+import com.bogdan.webapp.service.StudentService;
+
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/students")
 public class StudentController {
 
-    private StudentService studentService;
+	private StudentService studentService;
 
-    @Autowired
-    public StudentController(StudentService studentService) {
-        this.studentService = studentService;
-    }
+	@Autowired
+	public StudentController(StudentService studentService) {
+		this.studentService = studentService;
+	}
 
-    @GetMapping("/students")
-    public List<Student> getStudents() {
-        return studentService.findAll();
-    }
+	@GetMapping()
+	public List<Student> getStudents() {
+		return studentService.findAll();
+	}
 
-    @GetMapping("/students/{studentId}")
-    public Student getStudentById(@PathVariable int studentId) {
-        Student student = studentService.findById(studentId);
+	@GetMapping("/{studentId}")
+	public Student getStudentById(@PathVariable int studentId) {
+		Student student = studentService.findById(studentId);
 
-        if (student == null) {
-            throw new RuntimeException("Employee is not found " + studentId);
-        }
+		if (student == null) {
+			throw new RuntimeException("Employee is not found " + studentId);
+		}
 
-        return student;
-    }
+		return student;
+	}
 
-    @PostMapping("/students/register")
-    public Student addStudent(@Valid @RequestBody Student newStudent) {
-        List<Student> students = studentService.findAll();
+	@PostMapping("/register")
+	public Student register(@Valid @RequestBody Student newStudent) {
+		return studentService.register(newStudent);
+	}
 
-        System.out.println("New Student " + newStudent.toString());
+//	@PostMapping("login")
+//	public Student loginUser(@Valid @RequestBody Student student) {
+//		List<Student> students = studentService.findAll();
+//
+//		for (Student theStudent : students) {
+//			if (theStudent.equals(student)) {
+//				System.out.println("Student: " + student + " logged in");
+//				studentService.save(student);
+//			} else {
+//				throw new RuntimeException("Incorrect credentials");
+//			}
+//		}
+//		return student;
+//
+//	}
 
-        for (Student student : students) {
-            System.out.println("Registered student: " + newStudent.toString());
+//	@PutMapping()
+//	public Student updateStudent(@RequestBody Student student) {
+//
+//		studentService.save(student);
+//
+//		return student;
+//	}
 
-            if (super.equals(newStudent)) {
-                throw new RuntimeException("Student already exists " + newStudent);
-            }
-        }
+	@DeleteMapping("{studentId}")
+	public String deleteStudent(@PathVariable int studentId) {
+		Student student = studentService.findById(studentId);
 
-        newStudent.setId(0);
+		if (student == null) {
+			throw new RuntimeException("Students does not exist " + studentId);
+		}
 
-        studentService.save(newStudent);
+		studentService.deleteById(studentId);
 
-        return newStudent;
-    }
-
-    @PostMapping("/students/login")
-    public Student loginUser(@Valid @RequestBody Student student) {
-        List<Student> students = studentService.findAll();
-
-        for (Student theStudent : students) {
-            if (theStudent.equals(student)) {
-                System.out.println("Student: " + student + " logged in");
-                studentService.save(student);
-            } else {
-                throw new RuntimeException("Incorrect credentials");
-            }
-        }
-        return student;
-
-    }
-
-    @PutMapping("/students")
-    public Student saveStudent(@RequestBody Student student) {
-
-        studentService.save(student);
-
-        return student;
-    }
-
-    @DeleteMapping("/students/{studentId}")
-    public String deleteStudent(@PathVariable int studentId) {
-        Student student = studentService.findById(studentId);
-
-        if (student == null) {
-            throw new RuntimeException("Students does not exist " + studentId);
-        }
-
-        studentService.deleteById(studentId);
-
-        return "Deleted student id  " + studentId;
-    }
+		return "Deleted student id  " + studentId;
+	}
 }

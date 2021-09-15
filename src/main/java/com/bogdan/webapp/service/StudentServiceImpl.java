@@ -1,52 +1,59 @@
 package com.bogdan.webapp.service;
 
-import com.bogdan.webapp.entity.Student;
-import com.bogdan.webapp.repo.StudentRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.bogdan.webapp.dao.StudentDao;
+import com.bogdan.webapp.entity.Student;
 
 @Service
 public class StudentServiceImpl implements StudentService {
 
-    private StudentRepository studentRepository;
+	private StudentDao studentDao;
 
-    @Autowired
-    public StudentServiceImpl(StudentRepository studentRepository) {
-        this.studentRepository = studentRepository;
-    }
+	@Autowired
+	public StudentServiceImpl(StudentDao studentDao) {
+		this.studentDao = studentDao;
+	}
 
+	@Override
+	public List<Student> findAll() {
+		return studentDao.findAll();
+	}
 
-    @Override
-    public List<Student> findAll() {
-        return studentRepository.findAll();
-    }
+	@Override
+	public Student findById(int id) {
+		Optional<Student> result = studentDao.findById(id);
+		Student student = null;
 
-    @Override
-    public Student findById(int id) {
-        Optional<Student> result = studentRepository.findById(id);
-        Student student = null;
+		if (result.isPresent()) {
+			student = result.get();
+		} else {
+			throw new RuntimeException("Could not find student " + id);
+		}
 
-        if (result.isPresent()) {
-            student = result.get();
-        } else {
-            throw new RuntimeException("Could not find student " + id);
-        }
+		return student;
+	}
 
-        return student;
-    }
+	@Override
+	public Student register(Student newStudent) {
+		Optional<Student> existingStudent = studentDao.findByUsername(newStudent.getUsername());
+		if (existingStudent.isPresent()) {
+			throw new RuntimeException("Student already exists " + newStudent);
+		}
 
-    @Override
-    public void save(Student student) {
-        studentRepository.save(student);
-    }
+		return studentDao.save(newStudent);
+	}
 
+	// new login method
 
-    @Override
-    public void deleteById(int id) {
-        studentRepository.deleteById(id);
-    }
+	// new updateuser method
+
+	@Override
+	public void deleteById(int id) {
+		studentDao.delete(id);
+	}
 }
