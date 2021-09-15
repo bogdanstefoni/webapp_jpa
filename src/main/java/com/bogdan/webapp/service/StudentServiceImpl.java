@@ -1,7 +1,7 @@
 package com.bogdan.webapp.service;
 
-import com.bogdan.webapp.dao.GenericRepository;
 import com.bogdan.webapp.entity.Student;
+import com.bogdan.webapp.repo.StudentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -10,16 +10,14 @@ import java.util.Optional;
 
 
 @Service
-public class StudentServiceImpl implements StudentService{
+public class StudentServiceImpl implements StudentService {
 
-    private GenericRepository studentRepository ;
+    private StudentRepository studentRepository;
 
     @Autowired
-    public StudentServiceImpl(GenericRepository studentRepository) {
+    public StudentServiceImpl(StudentRepository studentRepository) {
         this.studentRepository = studentRepository;
     }
-
-
 
 
     @Override
@@ -30,10 +28,9 @@ public class StudentServiceImpl implements StudentService{
     @Override
     public Student findById(int id) {
         Optional<Student> result = studentRepository.findById(id);
-
         Student student = null;
 
-        if(result.isPresent()) {
+        if (result.isPresent()) {
             student = result.get();
         } else {
             throw new RuntimeException("Could not find student " + id);
@@ -46,7 +43,6 @@ public class StudentServiceImpl implements StudentService{
     public void save(Student student) {
         studentRepository.save(student);
     }
-
 
 
     @Override
