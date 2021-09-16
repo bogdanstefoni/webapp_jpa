@@ -1,59 +1,87 @@
 package com.bogdan.webapp.service;
 
-import java.util.List;
-import java.util.Optional;
-
+import com.bogdan.webapp.dao.StudentDao;
+import com.bogdan.webapp.entity.Student;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.bogdan.webapp.dao.StudentDao;
-import com.bogdan.webapp.entity.Student;
+import java.util.List;
+import java.util.Optional;
+
 
 @Service
 public class StudentServiceImpl implements StudentService {
 
-	private StudentDao studentDao;
+    private Logger logger = LoggerFactory.getLogger(StudentServiceImpl.class);
 
-	@Autowired
-	public StudentServiceImpl(StudentDao studentDao) {
-		this.studentDao = studentDao;
-	}
+    private StudentDao studentDao;
 
-	@Override
-	public List<Student> findAll() {
-		return studentDao.findAll();
-	}
+    @Autowired
+    public StudentServiceImpl(StudentDao studentDao) {
+        this.studentDao = studentDao;
+    }
 
-	@Override
-	public Student findById(int id) {
-		Optional<Student> result = studentDao.findById(id);
-		Student student = null;
 
-		if (result.isPresent()) {
-			student = result.get();
-		} else {
-			throw new RuntimeException("Could not find student " + id);
-		}
+    @Override
+    public List<Student> findAll() {
+        return studentDao.findAll();
+    }
 
-		return student;
-	}
+    @Override
+    public Student findById(int id) {
+        Optional<Student> result = studentDao.findById(id);
+        Student student = null;
 
-	@Override
-	public Student register(Student newStudent) {
-		Optional<Student> existingStudent = studentDao.findByUsername(newStudent.getUsername());
-		if (existingStudent.isPresent()) {
-			throw new RuntimeException("Student already exists " + newStudent);
-		}
+        if (result.isPresent()) {
+            student = result.get();
+        } else {
+            throw new RuntimeException("Could not find student " + id);
+        }
 
-		return studentDao.save(newStudent);
-	}
+        return student;
+    }
 
-	// new login method
+    @Override
+    public Optional<Student> findByUsername(String username) {
+        return studentDao.findByUsername(username);
+    }
 
-	// new updateuser method
+    @Override
+    public Student register(Student newStudent) {
+        Optional<Student> existingStudent = studentDao.findByUsername(newStudent.getUsername());
 
-	@Override
-	public void deleteById(int id) {
-		studentDao.delete(id);
-	}
+        if (existingStudent.isPresent()) {
+            throw new RuntimeException("Student already exist: " + existingStudent);
+        }
+
+        return studentDao.save(newStudent);
+    }
+
+    public Student login(Student student) {
+        Optional<Student> existingStudent = studentDao.findByUsername(student.getUsername());
+
+        if (!existingStudent.isPresent()) {
+            throw new RuntimeException("Student doesn't exist: " + existingStudent);
+        }
+
+        logger.info("Student " + student + " logged in");
+
+        return studentDao.save(student);
+
+    }
+
+    @Override
+    public void update(Student student) {
+
+
+        studentDao.save(student);
+    }
+
+
+    @Override
+    public void deleteById(int id) {
+        studentDao.deleteById(id);
+    }
 }

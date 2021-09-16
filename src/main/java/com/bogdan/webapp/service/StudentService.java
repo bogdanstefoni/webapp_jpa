@@ -1,17 +1,25 @@
 package com.bogdan.webapp.service;
 
-import java.util.List;
-
 import com.bogdan.webapp.entity.Student;
+
+import java.util.List;
+import java.util.Optional;
 
 public interface StudentService {
 
-	List<Student> findAll();
+    List<Student> findAll();
 
-	Student findById(int id);
+    Student findById(int id);
 
-	Student register(Student student);
+    Optional<Student> findByUsername(String username);
 
-	void deleteById(int id);
+    Student register(Student student);
+
+    Student login(Student student);
+
+    void update(Student student);
+
+    void deleteById(int id);
+
 
 }
