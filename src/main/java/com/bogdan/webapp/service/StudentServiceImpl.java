@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
-
 @Service
 public class StudentServiceImpl implements StudentService {
 
@@ -24,7 +23,6 @@ public class StudentServiceImpl implements StudentService {
     public StudentServiceImpl(StudentDao studentDao) {
         this.studentDao = studentDao;
     }
-
 
     @Override
     public List<Student> findAll() {
@@ -59,21 +57,20 @@ public class StudentServiceImpl implements StudentService {
         return studentDao.save(newStudent);
     }
 
-    public Student login(Student student) {
+    @Override
+    public void login(Student student) {
 
         studentDao.findByUsername(student.getUsername())
                 .orElseThrow(() -> new StudentNotFoundException(student.getUsername()));
 
-        return studentDao.save(student);
+        logger.info("Student: " + student.getUsername() + " logged in");
     }
 
     @Override
     public void update(Student student) {
 
-
         studentDao.save(student);
     }
-
 
     @Override
     public void deleteById(int id) {

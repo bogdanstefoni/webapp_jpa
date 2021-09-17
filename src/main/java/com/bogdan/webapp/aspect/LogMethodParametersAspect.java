@@ -14,7 +14,7 @@ import java.util.Arrays;
 @Component
 public class LogMethodParametersAspect {
 
-    private Logger logger = LoggerFactory.getLogger(LogMethodParametersAspect.class);
+    private final Logger logger = LoggerFactory.getLogger(LogMethodParametersAspect.class);
 
     @Around("@annotation(com.bogdan.webapp.annotation.LogMethodParameters)")
     public Object logMethodParameters(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
@@ -33,7 +33,6 @@ public class LogMethodParametersAspect {
         for (int i = 0; i < parameterNames.length; i++) {
             logger.info("Parameter name: " + parameterNames[i] + ". Parameter value: " + parameterValues[i]);
         }
-
 
         return proceedingJoinPoint.proceed();
     }

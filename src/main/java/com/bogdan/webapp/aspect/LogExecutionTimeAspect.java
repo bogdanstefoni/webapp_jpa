@@ -25,9 +25,7 @@ public class LogExecutionTimeAspect {
     public Object logExecutionTime(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
 
         long start = System.currentTimeMillis();
-
         Object proceed = proceedingJoinPoint.proceed();
-
         String executionTime = getDurationInSeconds(System.currentTimeMillis() - start);
 
         logger.info("Execution time for method: " + proceedingJoinPoint.getSignature().getDeclaringTypeName() + "." + proceedingJoinPoint.getSignature().getName() +
@@ -36,6 +34,5 @@ public class LogExecutionTimeAspect {
         return proceed;
 
     }
-
 
 }

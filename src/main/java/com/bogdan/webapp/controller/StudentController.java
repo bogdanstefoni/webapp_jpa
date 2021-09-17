@@ -41,9 +41,9 @@ public class StudentController {
     }
 
     @PostMapping("/login")
-    public Student loginUser(@Valid @RequestBody Student student) {
+    public void loginUser(@Valid @RequestBody Student student) {
 
-        return studentService.login(student);
+        studentService.login(student);
 
     }
 

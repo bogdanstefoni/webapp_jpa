@@ -15,7 +15,7 @@ public interface StudentService {
 
     Student register(Student student);
 
-    Student login(Student student);
+    void login(Student student);
 
     void update(Student student);
 
