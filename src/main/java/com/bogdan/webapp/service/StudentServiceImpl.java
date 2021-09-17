@@ -2,6 +2,8 @@ package com.bogdan.webapp.service;
 
 import com.bogdan.webapp.dao.StudentDao;
 import com.bogdan.webapp.entity.Student;
+import com.bogdan.webapp.exception.NoDataFoundException;
+import com.bogdan.webapp.exception.StudentNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,21 +28,19 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public List<Student> findAll() {
-        return studentDao.findAll();
+        List<Student> cities = studentDao.findAll();
+
+        if (cities.isEmpty()) {
+            throw new NoDataFoundException();
+        }
+
+        return cities;
     }
 
     @Override
     public Student findById(int id) {
-        Optional<Student> result = studentDao.findById(id);
-        Student student = null;
-
-        if (result.isPresent()) {
-            student = result.get();
-        } else {
-            throw new RuntimeException("Could not find student " + id);
-        }
-
-        return student;
+        return studentDao.findById(id)
+                .orElseThrow(() -> new StudentNotFoundException(id));
     }
 
     @Override
