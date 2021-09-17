@@ -1,88 +1,86 @@
 package com.bogdan.webapp.service;
 
-import com.bogdan.webapp.dao.StudentDao;
-import com.bogdan.webapp.entity.Student;
-import com.bogdan.webapp.exception.NoDataFoundException;
-import com.bogdan.webapp.exception.StudentNotFoundException;
+import java.util.List;
+import java.util.Optional;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
+import com.bogdan.webapp.ErrorsEnum;
+import com.bogdan.webapp.dao.StudentDao;
+import com.bogdan.webapp.entity.Student;
+import com.bogdan.webapp.exception.CustomException;
+import com.bogdan.webapp.exception.NoDataFoundException;
 
 @Service
 public class StudentServiceImpl implements StudentService {
 
-    private Logger logger = LoggerFactory.getLogger(StudentServiceImpl.class);
+	private Logger logger = LoggerFactory.getLogger(StudentServiceImpl.class);
 
-    private StudentDao studentDao;
+	private StudentDao studentDao;
 
-    @Autowired
-    public StudentServiceImpl(StudentDao studentDao) {
-        this.studentDao = studentDao;
-    }
+	@Autowired
+	public StudentServiceImpl(StudentDao studentDao) {
+		this.studentDao = studentDao;
+	}
 
-    @Override
-    public List<Student> findAll() {
-        List<Student> cities = studentDao.findAll();
+	@Override
+	public List<Student> findAll() {
+		List<Student> cities = studentDao.findAll();
 
-        if (cities.isEmpty()) {
-            throw new NoDataFoundException();
-        }
+		if (cities.isEmpty()) {
+			throw new NoDataFoundException();
+		}
 
-        return cities;
-    }
+		return cities;
+	}
 
-    @Override
-    public Student findById(int id) {
-        return studentDao.findById(id)
-                .orElseThrow(() -> new StudentNotFoundException(id));
-    }
+	@Override
+	public Student findById(int id) {
+		return studentDao.findById(id).orElseThrow(() -> new CustomException(ErrorsEnum.GENERAL_ERROR));
+	}
 
-    @Override
-    public Optional<Student> findByUsername(String username) {
-        return studentDao.findByUsername(username);
-    }
+	@Override
+	public Student findByUsername(String username) {
+		return studentDao.findByUsername(username).orElseThrow(() -> new CustomException(ErrorsEnum.GENERAL_ERROR));
+	}
 
-    @Override
-    public Student register(Student newStudent) {
-        Optional<Student> existingStudent = studentDao.findByUsername(newStudent.getUsername());
+	@Override
+	public Student register(Student newStudent) {
+		Optional<Student> existingStudent = studentDao.findByUsername(newStudent.getUsername());
 
-        if (existingStudent.isPresent()) {
-            throw new RuntimeException("Student already exist: " + existingStudent);
-        }
+		if (existingStudent.isPresent()) {
+			throw new RuntimeException("Student already exist: " + existingStudent);
+		}
 
-        return studentDao.save(newStudent);
-    }
+		return studentDao.save(newStudent);
+	}
 
-    @Override
-    public void login(Student student) {
+	@Override
+	public void login(Student student) {
 
-        studentDao.findByUsername(student.getUsername())
-                .orElseThrow(() -> new StudentNotFoundException(student.getUsername()));
+		studentDao.findByUsername(student.getUsername())
+				.orElseThrow(() -> new CustomException(ErrorsEnum.GENERAL_ERROR));
 
-        logger.info("Student: " + student.getUsername() + " logged in");
-    }
+		logger.info("Student: " + student.getUsername() + " logged in");
+	}
 
-    @Override
-    public void update(Student student) {
+	@Override
+	public void update(Student student) {
 
-        studentDao.save(student);
-    }
+		studentDao.save(student);
+	}
 
-    @Override
-    public void deleteById(int id) {
-        studentDao.deleteById(id);
-    }
+	@Override
+	public void deleteById(int id) {
+		studentDao.deleteById(id);
+	}
 
-    @Override
-    public void deleteByUsername(String username) {
-        studentDao.findByUsername(username)
-                .orElseThrow(() -> new StudentNotFoundException(username));
-        studentDao.deleteByUsername(username);
-    }
+	@Override
+	public void deleteByUsername(String username) {
+		studentDao.findByUsername(username).orElseThrow(() -> new CustomException(ErrorsEnum.GENERAL_ERROR));
+		studentDao.deleteByUsername(username);
+	}
 }
-
-
