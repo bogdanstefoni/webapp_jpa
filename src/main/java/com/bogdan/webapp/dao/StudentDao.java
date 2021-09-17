@@ -30,6 +30,7 @@ public class StudentDao {
     }
 
     @LogExecutionTime
+    @LogMethodParameters
     public Optional<Student> findById(int id) {
         Optional<Student> result = genericRepository.findById(id);
 
@@ -42,8 +43,10 @@ public class StudentDao {
         return genericRepository.findByUsername(username).stream().findFirst();
     }
 
+    @LogExecutionTime
+    @LogMethodParameters
     public Student save(Student student) {
-        logger.info("Student was saved " + student.getUsername());
+        logger.info("Student was saved: " + student.getUsername());
         return genericRepository.save(student);
 
     }
@@ -51,5 +54,10 @@ public class StudentDao {
     public void deleteById(int id) {
         logger.info("Deleted student with id " + id);
         genericRepository.deleteById(id);
+    }
+
+    public void deleteByUsername(String username) {
+        logger.info("Deleted student: " + username);
+        genericRepository.deleteByUsername(username);
     }
 }

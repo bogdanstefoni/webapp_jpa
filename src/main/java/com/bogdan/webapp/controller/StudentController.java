@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/student")
+@RequestMapping("/students")
 public class StudentController {
 
     private StudentService studentService;
@@ -58,5 +58,10 @@ public class StudentController {
     @DeleteMapping("/{studentId}")
     public void deleteStudent(@PathVariable int studentId) {
         studentService.deleteById(studentId);
+    }
+
+    @DeleteMapping("/username/{username}")
+    public void deleteStudent(@PathVariable String username) {
+        studentService.deleteByUsername(username);
     }
 }

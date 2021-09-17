@@ -21,5 +21,6 @@ public interface StudentService {
 
     void deleteById(int id);
 
+    void deleteByUsername(String username);
 
 }

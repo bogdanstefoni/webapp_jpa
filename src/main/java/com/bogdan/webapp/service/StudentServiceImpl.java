@@ -60,16 +60,11 @@ public class StudentServiceImpl implements StudentService {
     }
 
     public Student login(Student student) {
-        Optional<Student> existingStudent = studentDao.findByUsername(student.getUsername());
 
-        if (!existingStudent.isPresent()) {
-            throw new RuntimeException("Student doesn't exist: " + existingStudent);
-        }
-
-        logger.info("Student " + student + " logged in");
+        studentDao.findByUsername(student.getUsername())
+                .orElseThrow(() -> new StudentNotFoundException(student.getUsername()));
 
         return studentDao.save(student);
-
     }
 
     @Override
@@ -84,4 +79,13 @@ public class StudentServiceImpl implements StudentService {
     public void deleteById(int id) {
         studentDao.deleteById(id);
     }
+
+    @Override
+    public void deleteByUsername(String username) {
+        studentDao.findByUsername(username)
+                .orElseThrow(() -> new StudentNotFoundException(username));
+        studentDao.deleteByUsername(username);
+    }
 }
+
+
