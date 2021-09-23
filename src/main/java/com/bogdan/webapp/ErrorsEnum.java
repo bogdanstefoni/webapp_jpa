@@ -4,7 +4,8 @@ import org.springframework.http.HttpStatus;
 
 public enum ErrorsEnum {
 
-	GENERAL_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "Unexpected error.", 1);
+	GENERAL_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "Unexpected error.", 1),
+	STUDENT_NOT_FOUND(HttpStatus.NOT_FOUND, "Student was not found", 404);
 
 	private HttpStatus httpStatus;
 

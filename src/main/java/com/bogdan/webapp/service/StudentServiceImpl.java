@@ -39,12 +39,12 @@ public class StudentServiceImpl implements StudentService {
 
 	@Override
 	public Student findById(int id) {
-		return studentDao.findById(id).orElseThrow(() -> new CustomException(ErrorsEnum.GENERAL_ERROR));
+		return studentDao.findById(id).orElseThrow(() -> new CustomException(ErrorsEnum.STUDENT_NOT_FOUND));
 	}
 
 	@Override
 	public Student findByUsername(String username) {
-		return studentDao.findByUsername(username).orElseThrow(() -> new CustomException(ErrorsEnum.GENERAL_ERROR));
+		return studentDao.findByUsername(username).orElseThrow(() -> new CustomException(ErrorsEnum.STUDENT_NOT_FOUND));
 	}
 
 	@Override
@@ -62,7 +62,7 @@ public class StudentServiceImpl implements StudentService {
 	public void login(Student student) {
 
 		studentDao.findByUsername(student.getUsername())
-				.orElseThrow(() -> new CustomException(ErrorsEnum.GENERAL_ERROR));
+				.orElseThrow(() -> new CustomException(ErrorsEnum.STUDENT_NOT_FOUND));
 
 		logger.info("Student: " + student.getUsername() + " logged in");
 	}
@@ -80,7 +80,7 @@ public class StudentServiceImpl implements StudentService {
 
 	@Override
 	public void deleteByUsername(String username) {
-		studentDao.findByUsername(username).orElseThrow(() -> new CustomException(ErrorsEnum.GENERAL_ERROR));
+		studentDao.findByUsername(username).orElseThrow(() -> new CustomException(ErrorsEnum.STUDENT_NOT_FOUND));
 		studentDao.deleteByUsername(username);
 	}
 }
