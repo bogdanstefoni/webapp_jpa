@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import com.bogdan.webapp.ErrorsEnum;
+import com.bogdan.webapp.entity.Student;
 import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -31,7 +32,7 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
 		if(ex instanceof CustomException) {
 
 			body.put("timestamp", LocalDate.now());
-			body.put("error code", error.getErrorCode());
+			body.put("error code", Student.errorCount++);
 			body.put("error description", error.getErrorDescription());
 
 		} else {
