@@ -36,8 +36,6 @@ public class Student {
 	@NotBlank
 	private String password;
 
-	public static int errorCount = 100;
-
 	public Student() {
 	}
 
