@@ -1,12 +1,7 @@
 package com.bogdan.webapp.exception;
 
-import java.time.LocalDate;
-import java.util.LinkedHashMap;
-import java.util.Map;
-
 import javax.servlet.http.HttpServletRequest;
 
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -18,28 +13,17 @@ import com.bogdan.webapp.ErrorsEnum;
 @ControllerAdvice
 public class ControllerAdvisor extends ResponseEntityExceptionHandler {
 
-	private static final String TIMESTAMP = "timestamp";
-	private static final String ERROR_CODE = "errorCode";
-	private static final String ERROR_DESCRIPTION = "errorDescription";
-
 	@ExceptionHandler(Exception.class)
 	@ResponseBody
-	public ResponseEntity<Object> handleException(HttpServletRequest request, Throwable ex) {
-		HttpStatus httpStatus;
-		Map<String, Object> body = new LinkedHashMap<>();
-		body.put(TIMESTAMP, LocalDate.now());
+	public ResponseEntity<String> handleException(HttpServletRequest request, Throwable ex) {
+		ErrorsEnum error;
 		if (ex instanceof CustomException) {
 			CustomException customException = (CustomException) ex;
-			ErrorsEnum error = customException.getErrorsEnum();
-			body.put(ERROR_CODE, error.getErrorCode());
-			body.put(ERROR_DESCRIPTION, error.getErrorDescription());
-			httpStatus = error.getHttpStatus();
+			error = customException.getErrorsEnum();
 		} else {
-			body.put(ERROR_CODE, ErrorsEnum.GENERAL_ERROR.getErrorCode());
-			body.put(ERROR_DESCRIPTION, ErrorsEnum.GENERAL_ERROR.getErrorDescription());
-			httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
+			error = ErrorsEnum.GENERAL_ERROR;
 		}
 
-		return new ResponseEntity<>(body, httpStatus);
+		return RestResponse.createErrorResponse(error);
 	}
 }
