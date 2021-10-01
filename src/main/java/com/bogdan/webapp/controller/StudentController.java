@@ -4,7 +4,9 @@ import java.util.List;
 
 import javax.validation.Valid;
 
+import com.bogdan.webapp.dto.StudentDto;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -29,29 +31,29 @@ public class StudentController {
 	}
 
 	@GetMapping()
-	public List<Student> getStudents() {
+	public ResponseEntity<String> getStudents() {
 		return studentService.findAll();
 	}
 
 	@GetMapping("/{studentId}")
-	public Student getStudentById(@PathVariable int studentId) {
+	public ResponseEntity<String> getStudentById(@PathVariable int studentId) {
 		return studentService.findById(studentId);
 	}
 
 	@GetMapping("/username/{username}")
-	public Student getStudentByUsername(@PathVariable String username) {
+	public ResponseEntity<String> getStudentByUsername(@PathVariable String username) {
 		return studentService.findByUsername(username);
 	}
 
 	@PostMapping("/register")
-	public Student register(@Valid @RequestBody Student newStudent) {
-		return studentService.register(newStudent);
+	public ResponseEntity<String> register(@Valid @RequestBody StudentDto studentDto) {
+		return studentService.register(studentDto);
 	}
 
 	@PostMapping("/login")
-	public void loginUser(@Valid @RequestBody Student student) {
+	public ResponseEntity<String>  loginUser(@Valid @RequestBody StudentDto studentDto) {
 
-		studentService.login(student);
+		return studentService.login(studentDto);
 
 	}
 

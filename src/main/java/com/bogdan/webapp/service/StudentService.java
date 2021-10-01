@@ -2,19 +2,21 @@ package com.bogdan.webapp.service;
 
 import java.util.List;
 
+import com.bogdan.webapp.dto.StudentDto;
 import com.bogdan.webapp.entity.Student;
+import org.springframework.http.ResponseEntity;
 
 public interface StudentService {
 
-	List<Student> findAll();
+	ResponseEntity<String> findAll();
 
-	Student findById(int id);
+	ResponseEntity<String> findById(int id);
 
-	Student findByUsername(String username);
+	ResponseEntity<String> findByUsername(String username);
 
-	Student register(Student student);
+	ResponseEntity<String>  register(StudentDto studentDto);
 
-	void login(Student student);
+	ResponseEntity<String>  login(StudentDto studentDto);
 
 	void update(Student student);
 

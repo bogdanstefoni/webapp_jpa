@@ -3,9 +3,17 @@ package com.bogdan.webapp.service;
 import java.util.List;
 import java.util.Optional;
 
+import com.bogdan.webapp.dto.StudentDto;
+import com.bogdan.webapp.dto.StudentResponseDto;
+import com.bogdan.webapp.exception.RestResponse;
+import org.json.JSONArray;
+import org.json.JSONObject;
+import org.modelmapper.ModelMapper;
+import org.modelmapper.convention.MatchingStrategies;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.bogdan.webapp.ErrorsEnum;
@@ -21,56 +29,73 @@ public class StudentServiceImpl implements StudentService {
 
 	private StudentDao studentDao;
 
+
+
 	@Autowired
 	public StudentServiceImpl(StudentDao studentDao) {
 		this.studentDao = studentDao;
 	}
 
 	@Override
-	public List<Student> findAll() {
-		List<Student> cities = studentDao.findAll();
+	public ResponseEntity<String> findAll() {
+		List<Student> students = studentDao.findAll();
+		JSONArray jsonArray = new JSONArray();
 
-		if (cities.isEmpty()) {
-			throw new NoDataFoundException();
-		}
+		students.forEach(c -> {
+			StudentResponseDto responseDto = mapToStudentResponseDTO(c);
+			jsonArray.put(new JSONObject(responseDto));
+		});
 
-		return cities;
+		JSONObject jsonObject = new JSONObject();
+		jsonObject.put("students", jsonArray);
+
+		return RestResponse.createSuccessResponse(jsonObject);
 	}
 
 	@Override
-	public Student findById(int id) {
-		return studentDao.findById(id).orElseThrow(() -> new CustomException(ErrorsEnum.STUDENT_NOT_FOUND));
+	public ResponseEntity<String> findById(int id) {
+		Student student = studentDao.findById(id).orElseThrow(()
+				-> new CustomException(ErrorsEnum.STUDENT_NOT_FOUND));
+		 StudentResponseDto responseDto = mapToStudentResponseDTO(student);
+		return RestResponse.createSuccessResponse(new JSONObject(responseDto));
 	}
 
 	@Override
-	public Student findByUsername(String username) {
-		return studentDao.findByUsername(username).orElseThrow(() -> new CustomException(ErrorsEnum.STUDENT_NOT_FOUND));
+	public ResponseEntity<String> findByUsername(String username) {
+		Student student = studentDao.findByUsername(username).orElseThrow(()
+				-> new CustomException(ErrorsEnum.STUDENT_NOT_FOUND));
+		return RestResponse.createSuccessResponse(new JSONObject(student));
 	}
 
 	@Override
-	public Student register(Student newStudent) {
-		Optional<Student> existingStudent = studentDao.findByUsername(newStudent.getUsername());
-
+	public ResponseEntity<String>  register(StudentDto studentDto) {
+		Optional<Student> existingStudent = studentDao.findByUsername(studentDto.getUsername());
 		if (existingStudent.isPresent()) {
-			throw new RuntimeException("Student already exist: " + existingStudent);
+			throw new CustomException(ErrorsEnum.STUDENT_EXISTS);
 		}
 
-		return studentDao.save(newStudent);
+		Student student = mapToStudent(studentDto);
+
+		return RestResponse.createSuccessResponse(new JSONObject(mapToStudentResponseDTO(studentDao.create(student))));
 	}
 
 	@Override
-	public void login(Student student) {
+	public ResponseEntity<String> login(StudentDto studentDto) {
 
-		studentDao.findByUsername(student.getUsername())
-				.orElseThrow(() -> new CustomException(ErrorsEnum.STUDENT_NOT_FOUND));
+		Student student = studentDao.findByUsername(studentDto.getUsername())
+						.orElseThrow(() -> new CustomException(ErrorsEnum.STUDENT_NOT_FOUND));
 
-		logger.info("Student: " + student.getUsername() + " logged in");
+		StudentResponseDto responseDto = mapToStudentResponseDTO(student);
+
+		logger.info("Student: " + studentDto.getUsername() + " logged in");
+
+		return RestResponse.createSuccessResponse(new JSONObject(responseDto));
 	}
 
 	@Override
 	public void update(Student student) {
 
-		studentDao.save(student);
+		studentDao.update(student);
 	}
 
 	@Override
@@ -83,4 +108,18 @@ public class StudentServiceImpl implements StudentService {
 		studentDao.findByUsername(username).orElseThrow(() -> new CustomException(ErrorsEnum.STUDENT_NOT_FOUND));
 		studentDao.deleteByUsername(username);
 	}
+
+	private Student mapToStudent(StudentDto studentDto) {
+		ModelMapper mapper = new ModelMapper();
+		mapper.getConfiguration().setSkipNullEnabled(true).setMatchingStrategy(MatchingStrategies.STRICT);
+		return	mapper.map(studentDto, Student.class);
+	}
+
+	private StudentResponseDto mapToStudentResponseDTO(Student student) {
+		ModelMapper mapper = new ModelMapper();
+		mapper.getConfiguration().setSkipNullEnabled(true).setMatchingStrategy(MatchingStrategies.STRICT);
+		return mapper.map(student, StudentResponseDto.class);
+	}
+
+
 }

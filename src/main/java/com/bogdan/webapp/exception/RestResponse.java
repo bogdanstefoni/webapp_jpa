@@ -20,6 +20,12 @@ public class RestResponse {
 		return createResponse(jsonObject, HttpStatus.OK);
 	}
 
+	public static ResponseEntity<String> createGenericSuccessRestResponse() {
+		JSONObject jsonObject = new JSONObject();
+		jsonObject.put("message", "success");
+		return createResponse(jsonObject, HttpStatus.OK);
+	}
+
 	public static ResponseEntity<String> createErrorResponse(ErrorsEnum error) {
 		JSONObject jsonObject = new JSONObject();
 		jsonObject.put(ERROR_CODE, error.getErrorCode());

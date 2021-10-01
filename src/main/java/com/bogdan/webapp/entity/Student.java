@@ -1,23 +1,16 @@
 package com.bogdan.webapp.entity;
 
-import java.util.Objects;
+import org.apache.commons.lang3.StringUtils;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
+
+import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 
 @Entity
 @Table(name = "students")
-public class Student {
+public class Student extends BaseEntity{
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "id")
-	private int id;
+
 
 	@Column(name = "first_name")
 	private String firstName;
@@ -36,25 +29,12 @@ public class Student {
 	@NotBlank
 	private String password;
 
+	@Transient
+	private String fullName;
+
 	public Student() {
 	}
 
-	public Student(String firstName, String lastName, String email, @NotBlank String username,
-			@NotBlank String password) {
-		this.firstName = firstName;
-		this.lastName = lastName;
-		this.email = email;
-		this.username = username;
-		this.password = password;
-	}
-
-	public int getId() {
-		return id;
-	}
-
-	public void setId(int id) {
-		this.id = id;
-	}
 
 	public String getFirstName() {
 		return firstName;
@@ -96,24 +76,19 @@ public class Student {
 		this.password = password;
 	}
 
-	@Override
-	public boolean equals(Object o) {
-		if (this == o)
-			return true;
-		if (o == null || getClass() != o.getClass())
-			return false;
-		Student student = (Student) o;
-		return username.equals(student.username);
+	public String getFullName() {
+		return getFirstName()  + StringUtils.SPACE + getLastName();
 	}
 
-	@Override
-	public int hashCode() {
-		return Objects.hash(username);
+	public void setFullName(String fullName) {
+		this.fullName = fullName;
 	}
+
+
 
 	@Override
 	public String toString() {
-		return "Student{" + "id=" + id + ", firstName='" + firstName + '\'' + ", lastName='" + lastName + '\''
+		return "Student{" + " firstName='" + firstName + '\'' + ", lastName='" + lastName + '\''
 				+ ", email='" + email + '\'' + '}';
 	}
 }

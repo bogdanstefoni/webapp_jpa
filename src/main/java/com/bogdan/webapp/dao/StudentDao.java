@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -45,8 +46,18 @@ public class StudentDao {
 
     @LogExecutionTime
     @LogMethodParameters
-    public Student save(Student student) {
-        logger.info("Student was saved: " + student.getUsername());
+    public Student create(Student student) {
+        student.setCreateDate(new Date());
+        logger.info("Student was created: " + student.getUsername());
+        return genericRepository.save(student);
+
+    }
+
+    @LogExecutionTime
+    @LogMethodParameters
+    public Student update(Student student) {
+        student.setUpdateDate(new Date());
+        logger.info("Student was updated: " + student.getUsername());
         return genericRepository.save(student);
 
     }
