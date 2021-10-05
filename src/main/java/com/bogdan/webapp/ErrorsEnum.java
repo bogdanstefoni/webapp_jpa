@@ -6,7 +6,10 @@ public enum ErrorsEnum {
 
 	GENERAL_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "Unexpected error.", 1),
 	STUDENT_NOT_FOUND(HttpStatus.NOT_FOUND, "Student was not found", 2),
-	STUDENT_EXISTS(HttpStatus.NOT_ACCEPTABLE, "Student already found", 3);
+	STUDENT_EXISTS(HttpStatus.NOT_ACCEPTABLE, "Student already found", 3),
+	TOKEN_MISSING(HttpStatus.UNAUTHORIZED, "Token is missing from request", 4),
+	TOKEN_INVALID(HttpStatus.UNAUTHORIZED, "Token is invalid", 5);
+
 
 	private HttpStatus httpStatus;
 

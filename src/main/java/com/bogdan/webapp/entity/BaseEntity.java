@@ -1,5 +1,8 @@
 package com.bogdan.webapp.entity;
 
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
 import javax.persistence.*;
 import java.util.Date;
 
@@ -14,9 +17,11 @@ public abstract class BaseEntity {
     @Version
     private int version;
 
+    @CreationTimestamp
     @Column
     private Date createDate;
 
+    @UpdateTimestamp
     @Column
     private Date updateDate;
 

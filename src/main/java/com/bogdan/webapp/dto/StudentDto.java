@@ -3,6 +3,8 @@ package com.bogdan.webapp.dto;
 
 public class StudentDto {
 
+    private int id;
+
     private String firstName;
 
     private String lastName;
@@ -12,6 +14,14 @@ public class StudentDto {
     private String username;
 
     private String password;
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public String getFirstName() {
         return firstName;

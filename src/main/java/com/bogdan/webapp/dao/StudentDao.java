@@ -47,7 +47,7 @@ public class StudentDao {
     @LogExecutionTime
     @LogMethodParameters
     public Student create(Student student) {
-        student.setCreateDate(new Date());
+//        student.setCreateDate(new Date());
         logger.info("Student was created: " + student.getUsername());
         return genericRepository.save(student);
 
@@ -56,7 +56,7 @@ public class StudentDao {
     @LogExecutionTime
     @LogMethodParameters
     public Student update(Student student) {
-        student.setUpdateDate(new Date());
+//        student.setUpdateDate(new Date());
         logger.info("Student was updated: " + student.getUsername());
         return genericRepository.save(student);
 

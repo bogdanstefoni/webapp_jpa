@@ -18,7 +18,7 @@ public interface StudentService {
 
 	ResponseEntity<String>  login(StudentDto studentDto);
 
-	void update(Student student);
+	ResponseEntity<String>  update(StudentDto studentDto);
 
 	void deleteById(int id);
 

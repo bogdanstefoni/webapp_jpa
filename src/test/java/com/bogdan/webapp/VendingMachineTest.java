@@ -1,13 +1,16 @@
 package com.bogdan.webapp;
 
+import com.bogdan.webapp.exception.NotSufficientChangeException;
 import com.bogdan.webapp.exception.SoldOutException;
 import com.bogdan.webapp.factory.VendingMachineFactory;
 import com.bogdan.webapp.item.Item;
 import com.bogdan.webapp.service.IVendingMachine;
+import com.bogdan.webapp.service.VendingMachineImpl;
 import com.bogdan.webapp.storage.Bucket;
 import com.bogdan.webapp.storage.Cash;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -48,7 +51,7 @@ public class VendingMachineTest {
         List<Cash> change = bucket.getSecond();
 
         assertEquals(Item.PEPSI, item);
-
+        vendingMachine.printStats();
         assertTrue(change.isEmpty());
 
         logger.info("I did it!!");
@@ -90,14 +93,45 @@ public class VendingMachineTest {
 
     @Test(expected = SoldOutException.class)
     public void testSoldOut() {
-        for(int i = 0; i < 5 ; i++){
+        for(int i = 0; i <= 5 ; i++){
             vendingMachine.selectItemAndGetPrice(Item.SODA);
             vendingMachine.insertCoin(Cash.TWO_NOTE);
             vendingMachine.insertCoin(Cash.TWO_NOTE);
             vendingMachine.insertCoin(Cash.ONE_NOE);
+            vendingMachine.printStats();
             vendingMachine.collectItemAndChange();
         }
+    }
 
+    @Test(expected = NotSufficientChangeException.class)
+    public void testNotSufficientChangeException(){
+        for(int i = 0 ; i <= 5; i++){
+            vendingMachine.selectItemAndGetPrice(Item.FANTA);
+            vendingMachine.insertCoin(Cash.TWO_NOTE);
+            vendingMachine.insertCoin(Cash.TWO_NOTE);
+            vendingMachine.insertCoin(Cash.ONE_NOE);
+            vendingMachine.collectItemAndChange();
+
+            vendingMachine.selectItemAndGetPrice(Item.PEPSI);
+            vendingMachine.insertCoin(Cash.TWO_NOTE);
+            vendingMachine.insertCoin(Cash.TWO_NOTE);
+            vendingMachine.collectItemAndChange();
+            vendingMachine.printStats();
+        }
+    }
+
+    @Test(expected = SoldOutException.class)
+    public void testReset() {
+        IVendingMachine vendingMachine = VendingMachineFactory.createVendingMachine();
+        vendingMachine.reset();
+        vendingMachine.printStats();
+
+        vendingMachine.selectItemAndGetPrice(Item.PEPSI);
+    }
+
+    @Ignore
+    public void testVendingMachineImpl() {
+        VendingMachineImpl vm = new VendingMachineImpl();
 
     }
 

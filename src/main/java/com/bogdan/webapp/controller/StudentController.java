@@ -57,12 +57,13 @@ public class StudentController {
 
 	}
 
-	@PutMapping("")
-	public Student updateStudent(@RequestBody Student student) {
+	@PutMapping("/{studentId}")
+	public ResponseEntity<String>  updateStudent(@RequestBody StudentDto studentDto,
+												 @PathVariable int studentId) {
 
-		studentService.update(student);
+		studentDto.setId(studentId);
 
-		return student;
+		return studentService.update(studentDto);
 	}
 
 	@DeleteMapping("/{studentId}")

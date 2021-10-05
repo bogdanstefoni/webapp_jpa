@@ -150,6 +150,7 @@ public class VendingMachineImpl implements IVendingMachine {
         currentBalance = 0;
     }
 
+    @Override
     public void printStats(){
         System.out.println("Total sales: " + totalSales);
         System.out.println("Current vending storage : " + vendingStorage);

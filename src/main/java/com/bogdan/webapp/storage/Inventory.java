@@ -37,5 +37,10 @@ public class Inventory<T> {
         inventory.put(item, quantity);
     }
 
-
+    @Override
+    public String toString() {
+        return "Inventory{" +
+                "inventory=" + inventory +
+                '}';
+    }
 }

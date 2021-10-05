@@ -18,4 +18,6 @@ public interface IVendingMachine {
 
      void reset();
 
+     void printStats();
+
 }

@@ -17,27 +17,27 @@ public class RestResponse {
 	private static final String ERROR_DESCRIPTION = "errorDescription";
 
 	public static ResponseEntity<String> createSuccessResponse(JSONObject jsonObject) {
-		return createResponse(jsonObject, HttpStatus.OK);
+		return createRestResponse(createResponse(jsonObject), HttpStatus.OK);
 	}
 
 	public static ResponseEntity<String> createGenericSuccessRestResponse() {
 		JSONObject jsonObject = new JSONObject();
 		jsonObject.put("message", "success");
-		return createResponse(jsonObject, HttpStatus.OK);
+		return createRestResponse(createResponse(jsonObject), HttpStatus.OK);
 	}
 
 	public static ResponseEntity<String> createErrorResponse(ErrorsEnum error) {
 		JSONObject jsonObject = new JSONObject();
 		jsonObject.put(ERROR_CODE, error.getErrorCode());
 		jsonObject.put(ERROR_DESCRIPTION, error.getErrorDescription());
-		return createResponse(jsonObject, error.getHttpStatus());
+		return createRestResponse(createResponse(jsonObject), error.getHttpStatus());
 	}
 
-	private static ResponseEntity<String> createResponse(JSONObject jsonObject, HttpStatus httpStatus) {
+	public static JSONObject createResponse(JSONObject jsonObject) {
 		JSONObject response = new JSONObject();
 		response.put(RESULT, jsonObject);
 		response.put(TIMESTAMP, LocalDate.now());
-		return createRestResponse(response, httpStatus);
+		return response;
 	}
 
 	private static ResponseEntity<String> createRestResponse(JSONObject jsonObject, HttpStatus httpStatus) {
