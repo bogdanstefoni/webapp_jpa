@@ -8,16 +8,16 @@ import java.util.List;
 
 public interface IVendingMachine {
 
-     long selectItemAndGetPrice(Item item);
+    long selectItemAndGetPrice(Item item);
 
-     void insertCoin(Cash cash);
+    void insertCoin(Cash cash);
 
-     List<Cash> refund();
+    List<Cash> refund();
 
-     Bucket<Item, List<Cash>> collectItemAndChange();
+    Bucket<Item, List<Cash>> collectItemAndChange();
 
-     void reset();
+    void reset();
 
-     void printStats();
+    void printStats();
 
 }

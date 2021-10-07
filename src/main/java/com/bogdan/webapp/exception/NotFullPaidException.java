@@ -1,9 +1,9 @@
 package com.bogdan.webapp.exception;
 
-public class NotFullPaidException extends RuntimeException{
+public class NotFullPaidException extends RuntimeException {
 
-    private String message;
-    private long remaining;
+    private final String message;
+    private final long remaining;
 
     public NotFullPaidException(String message, long remaining) {
         this.message = message;

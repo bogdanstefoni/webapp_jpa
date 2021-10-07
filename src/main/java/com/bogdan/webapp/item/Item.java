@@ -1,10 +1,10 @@
 package com.bogdan.webapp.item;
 
 public enum Item {
-    PEPSI("Pepsi", 35), FANTA("Fanta", 45), SODA("Soda", 50) ;
+    PEPSI("Pepsi", 35), FANTA("Fanta", 45), SODA("Soda", 50);
 
-    private String name;
-    private int price;
+    private final String name;
+    private final int price;
 
     Item(String name, int price) {
         this.name = name;

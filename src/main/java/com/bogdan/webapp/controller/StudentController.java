@@ -1,78 +1,71 @@
 package com.bogdan.webapp.controller;
 
-import java.util.List;
-
-import javax.validation.Valid;
-
 import com.bogdan.webapp.dto.StudentDto;
+import com.bogdan.webapp.service.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import com.bogdan.webapp.entity.Student;
-import com.bogdan.webapp.service.StudentService;
+import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/students")
 public class StudentController {
 
-	private StudentService studentService;
+    private final StudentService studentService;
 
-	@Autowired
-	public StudentController(StudentService studentService) {
-		this.studentService = studentService;
-	}
+    @Autowired
+    public StudentController(StudentService studentService) {
+        this.studentService = studentService;
+    }
 
-	@GetMapping()
-	public ResponseEntity<String> getStudents() {
-		return studentService.findAll();
-	}
+    @GetMapping()
+    public ResponseEntity<String> getStudents() {
+        return studentService.findAll();
+    }
 
-	@GetMapping("/{studentId}")
-	public ResponseEntity<String> getStudentById(@PathVariable int studentId) {
-		return studentService.findById(studentId);
-	}
+    @GetMapping("/userId")
+    public ResponseEntity<String> getStudentById() {
+        return studentService.findById();
+    }
 
-	@GetMapping("/username/{username}")
-	public ResponseEntity<String> getStudentByUsername(@PathVariable String username) {
-		return studentService.findByUsername(username);
-	}
+    @GetMapping("/username/{username}")
+    public ResponseEntity<String> getStudentByUsername(
+            @PathVariable String username) {
+        return studentService.findByUsername(username);
+    }
 
-	@PostMapping("/register")
-	public ResponseEntity<String> register(@Valid @RequestBody StudentDto studentDto) {
-		return studentService.register(studentDto);
-	}
+    @PostMapping("/register")
+    public ResponseEntity<String> register(
+            @Valid @RequestBody StudentDto studentDto) {
+        return studentService.register(studentDto);
+    }
 
-	@PostMapping("/login")
-	public ResponseEntity<String>  loginUser(@Valid @RequestBody StudentDto studentDto) {
+    @PostMapping("/login")
+    public ResponseEntity<String> loginUser(
+            @Valid @RequestBody StudentDto studentDto) {
 
-		return studentService.login(studentDto);
+        return studentService.login(studentDto);
 
-	}
+    }
 
-	@PutMapping("/{studentId}")
-	public ResponseEntity<String>  updateStudent(@RequestBody StudentDto studentDto,
-												 @PathVariable int studentId) {
+    @PutMapping("/{studentId}")
+    public ResponseEntity<String> updateStudent(
+            @RequestBody StudentDto studentDto, @PathVariable int studentId) {
 
-		studentDto.setId(studentId);
+        studentDto.setId(studentId);
 
-		return studentService.update(studentDto);
-	}
+        return studentService.update(studentDto);
+    }
 
-	@DeleteMapping("/{studentId}")
-	public void deleteStudent(@PathVariable int studentId) {
-		studentService.deleteById(studentId);
-	}
+    @DeleteMapping("/{studentId}")
+    public void deleteStudent(@PathVariable int studentId) {
+        studentService.deleteById(studentId);
+    }
 
-	@DeleteMapping("/username/{username}")
-	public void deleteStudent(@PathVariable String username) {
-		studentService.deleteByUsername(username);
-	}
+    @DeleteMapping("/username/{username}")
+    public void deleteStudent(
+            @PathVariable String username) {
+        studentService.deleteByUsername(username);
+    }
 }

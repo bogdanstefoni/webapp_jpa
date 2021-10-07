@@ -1,6 +1,5 @@
 package com.bogdan.webapp.dto;
 
-
 public class StudentDto {
 
     private int id;

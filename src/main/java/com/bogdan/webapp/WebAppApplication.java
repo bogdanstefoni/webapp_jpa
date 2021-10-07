@@ -1,11 +1,8 @@
 package com.bogdan.webapp;
 
-import com.bogdan.webapp.filter.AuthorizationFilter;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
-import org.springframework.boot.web.servlet.FilterRegistrationBean;
-import org.springframework.context.annotation.Bean;
 
 @SpringBootApplication
 @ConfigurationPropertiesScan("com.bogdan.webapp")
@@ -15,5 +12,12 @@ public class WebAppApplication {
         SpringApplication.run(WebAppApplication.class, args);
     }
 
+//    @Bean
+//    public FilterRegistrationBean<AuthorizationFilter> logFilter() {
+//        FilterRegistrationBean<AuthorizationFilter> registrationBean = new FilterRegistrationBean<>();
+//        registrationBean.setFilter(new AuthorizationFilter());
+//        registrationBean.addUrlPatterns("/students/login");
+//        return registrationBean;
+//    }
 
 }

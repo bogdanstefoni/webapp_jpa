@@ -6,16 +6,14 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.bogdan.webapp.ErrorsEnum;
-import com.bogdan.webapp.exception.CustomException;
-import com.bogdan.webapp.exception.RestResponse;
 import com.bogdan.webapp.properties.AuthorizationProperties;
+import com.bogdan.webapp.service.CustomRequestBean;
 import org.apache.commons.lang3.StringUtils;
-import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -26,44 +24,28 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @Component
+@Order(Ordered.HIGHEST_PRECEDENCE)
 public class AuthorizationFilter extends OncePerRequestFilter {
 
-    private static final String ERROR_CODE = "errorCode";
-    private static final String ERROR_DESCRIPTION = "errorDescription";
+    private final Logger logger = LoggerFactory.getLogger(AuthorizationFilter.class);
 
     @Autowired
-    private static AuthorizationProperties authorizationProperties;
+    private AuthorizationProperties authorizationProperties;
 
-    private Logger logger = LoggerFactory.getLogger(LoggingFilter.class);
-
+    @Autowired
+    private CustomRequestBean customRequestBean;
 
     @Override
-    protected void doFilterInternal(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse,
-                                              FilterChain filterChain) throws ServletException, IOException {
+    protected void doFilterInternal(HttpServletRequest httpServletRequest,
+                                    HttpServletResponse httpServletResponse, FilterChain filterChain)
+            throws ServletException, IOException {
 
+        final String jwtToken = httpServletRequest.getHeader("jwtToken");
 
-
-        //de inlocuit
-        //avoid methods
-        final String jwtToken = httpServletRequest.getHeader("host");
-
-
-
-//
-        if(StringUtils.isBlank(jwtToken)) {
-
-            JSONObject jsonObject = new JSONObject();
-            jsonObject.put(ERROR_CODE,ErrorsEnum.TOKEN_MISSING.getErrorCode());
-            jsonObject.put(ERROR_DESCRIPTION, ErrorsEnum.TOKEN_MISSING.getErrorDescription());
-
-            httpServletResponse.setStatus(ErrorsEnum.TOKEN_MISSING.getHttpStatus().value());
-            httpServletResponse.getWriter().write(String.valueOf(RestResponse.createResponse(jsonObject)));
-            httpServletResponse.getWriter().flush();
-
-            return;
-        }
-        if (!"host".equals(jwtToken)) {
-            httpServletResponse.sendError(HttpStatus.UNAUTHORIZED.value(), "Unauthorized request");
+        if (StringUtils.isBlank(jwtToken)) {
+            logger.error(ErrorsEnum.TOKEN_MISSING.getErrorDescription());
+            httpServletResponse.sendError(ErrorsEnum.TOKEN_MISSING.getHttpStatus().value(),
+                    ErrorsEnum.TOKEN_MISSING.getErrorDescription());
 
             return;
         }
@@ -72,29 +54,31 @@ public class AuthorizationFilter extends OncePerRequestFilter {
 
             //Le aduc din proprietati
             Algorithm algorithm = Algorithm.HMAC256(authorizationProperties.getAlgorithmSecret());
-            JWTVerifier verifier = JWT.require(algorithm).withIssuer(authorizationProperties.getIssuer()).build();
+            JWTVerifier verifier = JWT.require(algorithm)
+                    .withIssuer(authorizationProperties.getIssuer()).build();
             verifier.verify(jwtToken);
             DecodedJWT decodedJwtToken = JWT.decode(jwtToken);
             String userId = decodedJwtToken.getSubject();
             String userName = decodedJwtToken.getClaim("username").asString();
-
+            customRequestBean.setUserId(Integer.parseInt(userId));
+            customRequestBean.setUserName(userName);
             System.out.println(userId + StringUtils.SPACE + userName);
 
-        }catch (JWTVerificationException e) {
-
-            JSONObject jsonObject = new JSONObject();
-            //token is invalid creeaza
-            jsonObject.put(ERROR_CODE,ErrorsEnum.TOKEN_INVALID.getErrorCode());
-            jsonObject.put(ERROR_DESCRIPTION, ErrorsEnum.TOKEN_INVALID.getErrorDescription());
-
-            httpServletResponse.setStatus(ErrorsEnum.TOKEN_INVALID.getHttpStatus().value());
-            httpServletResponse.getWriter().write(String.valueOf(RestResponse.createResponse(jsonObject)));
-            httpServletResponse.getWriter().flush();
+        } catch (JWTVerificationException e) {
+            logger.error(ErrorsEnum.TOKEN_INVALID.getErrorDescription(), e);
+            httpServletResponse.sendError(ErrorsEnum.TOKEN_INVALID.getHttpStatus().value(),
+                    e.getMessage());
 
             return;
         }
-//
-//
+
         filterChain.doFilter(httpServletRequest, httpServletResponse);
     }
+
+//    @Override
+//    protected boolean shouldNotFilter(HttpServletRequest request)
+//            throws ServletException {
+//        String path = request.getRequestURI();
+//        return "/students/login".equals(path);
+//    }
 }

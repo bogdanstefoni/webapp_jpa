@@ -14,11 +14,13 @@ import java.util.List;
 public interface StudentRepository extends JpaRepository<Student, Integer> {
 
     @Query("select s from Student s where s.username = :username")
-    List<Student> findByUsername(@Param("username") String username);
+    List<Student> findByUsername(
+            @Param("username") String username);
 
     @Transactional
     @Modifying
     @Query("delete from Student s where s.username = :username")
-    void deleteByUsername(@Param("username") String username);
+    void deleteByUsername(
+            @Param("username") String username);
 
 }

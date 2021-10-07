@@ -15,20 +15,20 @@ public class AuthorizationProperties {
         return hours;
     }
 
-    public String getAlgorithmSecret() {
-        return algorithmSecret;
-    }
-
-    public String getIssuer() {
-        return issuer;
-    }
-
     public void setHours(Integer hours) {
         this.hours = hours;
     }
 
+    public String getAlgorithmSecret() {
+        return algorithmSecret;
+    }
+
     public void setAlgorithmSecret(String algorithmSecret) {
         this.algorithmSecret = algorithmSecret;
+    }
+
+    public String getIssuer() {
+        return issuer;
     }
 
     public void setIssuer(String issuer) {

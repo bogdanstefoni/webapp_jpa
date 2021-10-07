@@ -7,18 +7,18 @@ public class Inventory<T> {
 
     Map<T, Integer> inventory = new HashMap<>();
 
-    public int getQuantity(T item){
+    public int getQuantity(T item) {
         Integer value = inventory.get(item);
-        return value == null? 0 : value;
+        return value == null ? 0 : value;
     }
 
     public void addItem(T item) {
         int count = inventory.get(item);
-        inventory.put(item, count+1);
+        inventory.put(item, count + 1);
     }
 
-    public void deductItem(T item ) {
-        if(hasItem(item)) {
+    public void deductItem(T item) {
+        if (hasItem(item)) {
             int count = inventory.get(item);
             inventory.put(item, count - 1);
         }
@@ -32,15 +32,12 @@ public class Inventory<T> {
         inventory.clear();
     }
 
-
-    public void put(T item, int quantity){
+    public void put(T item, int quantity) {
         inventory.put(item, quantity);
     }
 
     @Override
     public String toString() {
-        return "Inventory{" +
-                "inventory=" + inventory +
-                '}';
+        return "Inventory{" + "inventory=" + inventory + '}';
     }
 }

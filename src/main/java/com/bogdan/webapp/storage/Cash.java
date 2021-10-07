@@ -4,7 +4,7 @@ public enum Cash {
 
     COIN(5), ONE_NOE(10), TWO_NOTE(20);
 
-    private int value;
+    private final int value;
 
     Cash(int value) {
         this.value = value;

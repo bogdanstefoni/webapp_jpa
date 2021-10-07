@@ -2,8 +2,8 @@ package com.bogdan.webapp.storage;
 
 public class Bucket<E1, E2> {
 
-    private E1 fist;
-    private E2 second;
+    private final E1 fist;
+    private final E2 second;
 
     public Bucket(E1 fist, E2 second) {
         this.fist = fist;

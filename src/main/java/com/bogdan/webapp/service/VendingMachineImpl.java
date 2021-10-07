@@ -1,7 +1,5 @@
 package com.bogdan.webapp.service;
 
-
-
 import com.bogdan.webapp.exception.NotFullPaidException;
 import com.bogdan.webapp.exception.NotSufficientChangeException;
 import com.bogdan.webapp.exception.SoldOutException;
@@ -16,8 +14,8 @@ import java.util.List;
 
 public class VendingMachineImpl implements IVendingMachine {
 
-    private Inventory<Cash> bankStorage = new Inventory<>();
-    private Inventory<Item> vendingStorage = new Inventory<>();
+    private final Inventory<Cash> bankStorage = new Inventory<>();
+    private final Inventory<Item> vendingStorage = new Inventory<>();
     private long totalSales;
     private Item currentItem;
     private long currentBalance;
@@ -28,14 +26,13 @@ public class VendingMachineImpl implements IVendingMachine {
 
     public void initialize() {
 
-        for(Cash c : Cash.values()) {
+        for (Cash c : Cash.values()) {
             bankStorage.put(c, 5);
         }
         for (Item i : Item.values()) {
             vendingStorage.put(i, 5);
         }
     }
-
 
     @Override
     public long selectItemAndGetPrice(Item item) {
@@ -75,8 +72,7 @@ public class VendingMachineImpl implements IVendingMachine {
         return new Bucket<Item, List<Cash>>(item, change);
     }
 
-    private Item collectItem() throws NotSufficientChangeException,
-            NotFullPaidException {
+    private Item collectItem() throws NotSufficientChangeException, NotFullPaidException {
         if (isFullPaid()) {
             if (hasSufficientChange()) {
                 vendingStorage.deductItem(currentItem);
@@ -100,10 +96,7 @@ public class VendingMachineImpl implements IVendingMachine {
     }
 
     private boolean isFullPaid() {
-        if (currentBalance >= currentItem.getPrice()) {
-            return true;
-        }
-        return false;
+        return currentBalance >= currentItem.getPrice();
     }
 
     private List<Cash> getChange(long amount) throws NotSufficientChangeException {
@@ -113,26 +106,25 @@ public class VendingMachineImpl implements IVendingMachine {
             changes = new ArrayList<Cash>();
             long balance = amount;
             while (balance > 0) {
-                if (balance >= Cash.COIN.getValue()
-                        && bankStorage.hasItem(Cash.COIN)) {
+                if (balance >= Cash.COIN.getValue() && bankStorage.hasItem(Cash.COIN)) {
                     changes.add(Cash.COIN);
                     balance = balance - Cash.COIN.getValue();
                     continue;
 
-                } else if (balance >= Cash.ONE_NOE.getValue()
-                        && bankStorage.hasItem(Cash.ONE_NOE)) {
+                } else if (balance >= Cash.ONE_NOE.getValue() && bankStorage.hasItem(
+                        Cash.ONE_NOE)) {
                     changes.add(Cash.ONE_NOE);
                     balance = balance - Cash.ONE_NOE.getValue();
                     continue;
 
-                } else if (balance >= Cash.TWO_NOTE.getValue()
-                        && bankStorage.hasItem(Cash.TWO_NOTE)) {
+                } else if (balance >= Cash.TWO_NOTE.getValue() && bankStorage.hasItem(
+                        Cash.TWO_NOTE)) {
                     changes.add(Cash.TWO_NOTE);
                     balance = balance - Cash.TWO_NOTE.getValue();
                     continue;
                 } else {
-                    throw new NotSufficientChangeException("Not sufficient change," +
-                            "Please try another product");
+                    throw new NotSufficientChangeException(
+                            "Not sufficient change," + "Please try another product");
                 }
 
             }
@@ -151,28 +143,28 @@ public class VendingMachineImpl implements IVendingMachine {
     }
 
     @Override
-    public void printStats(){
+    public void printStats() {
         System.out.println("Total sales: " + totalSales);
         System.out.println("Current vending storage : " + vendingStorage);
         System.out.println("Current bank storage: " + bankStorage);
     }
 
-    private boolean hasSufficientChange(){
+    private boolean hasSufficientChange() {
         return hasSufficientChangeForAmount(currentBalance - currentItem.getPrice());
     }
 
-    private boolean hasSufficientChangeForAmount(long amount){
+    private boolean hasSufficientChangeForAmount(long amount) {
         boolean hasChange = true;
         try {
             getChange(amount);
-        }catch (NotSufficientChangeException ex) {
+        } catch (NotSufficientChangeException ex) {
             return hasChange = false;
         }
         return hasChange;
     }
 
     private void updateCashInventory(List<Cash> change) {
-        for(Cash c : change) {
+        for (Cash c : change) {
             bankStorage.deductItem(c);
         }
     }

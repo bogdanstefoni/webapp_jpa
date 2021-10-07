@@ -24,7 +24,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class VendingMachineTest {
     private static IVendingMachine vendingMachine;
 
-    private Logger logger = LoggerFactory.getLogger(VendingMachineTest.class);
+    private final Logger logger = LoggerFactory.getLogger(VendingMachineTest.class);
 
     @BeforeClass
     public static void setUp() {

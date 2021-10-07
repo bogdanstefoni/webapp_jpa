@@ -14,7 +14,7 @@ import java.text.NumberFormat;
 @Component
 public class LogExecutionTimeAspect {
 
-    private Logger logger = LoggerFactory.getLogger(LogExecutionTimeAspect.class);
+    private final Logger logger = LoggerFactory.getLogger(LogExecutionTimeAspect.class);
 
     private static String getDurationInSeconds(long duration) {
         NumberFormat numberFormat = new DecimalFormat("#0.00");
@@ -22,14 +22,16 @@ public class LogExecutionTimeAspect {
     }
 
     @Around("@annotation(com.bogdan.webapp.annotation.LogExecutionTime)")
-    public Object logExecutionTime(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
+    public Object logExecutionTime(
+            ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
 
         long start = System.currentTimeMillis();
         Object proceed = proceedingJoinPoint.proceed();
         String executionTime = getDurationInSeconds(System.currentTimeMillis() - start);
 
-        logger.info("Execution time for method: " + proceedingJoinPoint.getSignature().getDeclaringTypeName() + "." + proceedingJoinPoint.getSignature().getName() +
-                ": " + executionTime);
+        logger.info("Execution time for method: " + proceedingJoinPoint.getSignature()
+                .getDeclaringTypeName() + "." + proceedingJoinPoint.getSignature().getName() + ": "
+                + executionTime);
 
         return proceed;
 

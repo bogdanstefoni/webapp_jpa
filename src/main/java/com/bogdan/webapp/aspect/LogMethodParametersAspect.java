@@ -17,7 +17,8 @@ public class LogMethodParametersAspect {
     private final Logger logger = LoggerFactory.getLogger(LogMethodParametersAspect.class);
 
     @Around("@annotation(com.bogdan.webapp.annotation.LogMethodParameters)")
-    public Object logMethodParameters(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
+    public Object logMethodParameters(
+            ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
 
         CodeSignature signature = (CodeSignature) proceedingJoinPoint.getSignature();
 
@@ -31,7 +32,8 @@ public class LogMethodParametersAspect {
         Object[] parameterValues = proceedingJoinPoint.getArgs();
 
         for (int i = 0; i < parameterNames.length; i++) {
-            logger.info("Parameter name: " + parameterNames[i] + ". Parameter value: " + parameterValues[i]);
+            logger.info("Parameter name: " + parameterNames[i] + ". Parameter value: "
+                    + parameterValues[i]);
         }
 
         return proceedingJoinPoint.proceed();

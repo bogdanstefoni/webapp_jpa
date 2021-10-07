@@ -9,16 +9,14 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
 @Service
 public class StudentDao {
 
-
-    private StudentRepository genericRepository;
-    private Logger logger = LoggerFactory.getLogger(Student.class);
+    private final StudentRepository genericRepository;
+    private final Logger logger = LoggerFactory.getLogger(Student.class);
 
     @Autowired
     public StudentDao(StudentRepository genericRepository) {
@@ -40,14 +38,15 @@ public class StudentDao {
 
     @LogExecutionTime
     @LogMethodParameters
-    public Optional<Student> findByUsername(String username) {
+    public Optional<Student> findByUsername(
+            String username) {
         return genericRepository.findByUsername(username).stream().findFirst();
     }
 
     @LogExecutionTime
     @LogMethodParameters
     public Student create(Student student) {
-//        student.setCreateDate(new Date());
+        //        student.setCreateDate(new Date());
         logger.info("Student was created: " + student.getUsername());
         return genericRepository.save(student);
 
@@ -56,7 +55,7 @@ public class StudentDao {
     @LogExecutionTime
     @LogMethodParameters
     public Student update(Student student) {
-//        student.setUpdateDate(new Date());
+        //        student.setUpdateDate(new Date());
         logger.info("Student was updated: " + student.getUsername());
         return genericRepository.save(student);
 
