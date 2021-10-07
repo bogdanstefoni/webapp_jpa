@@ -8,6 +8,6 @@ CREATE TABLE `students`
     `email`      varchar(128),
     `version`    BIGINT,
     `create_date`  timestamp,
-    `update_datee` timestamp,
+    `update_date` timestamp,
     PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
