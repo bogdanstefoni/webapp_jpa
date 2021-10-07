@@ -3,6 +3,8 @@ package com.bogdan.webapp;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
+import org.springframework.context.annotation.Bean;
+import org.springframework.web.context.request.RequestContextListener;
 
 @SpringBootApplication
 @ConfigurationPropertiesScan("com.bogdan.webapp")
@@ -19,5 +21,10 @@ public class WebAppApplication {
 //        registrationBean.addUrlPatterns("/students/login");
 //        return registrationBean;
 //    }
+
+    @Bean
+    public RequestContextListener requestContextListener() {
+        return new RequestContextListener();
+    }
 
 }
