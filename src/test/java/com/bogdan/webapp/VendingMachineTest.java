@@ -15,7 +15,6 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.validation.constraints.AssertTrue;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -43,7 +42,7 @@ public class VendingMachineTest {
         assertEquals(Item.PEPSI.getPrice(),price);
 
         vendingMachine.insertCoin(Cash.TWO_NOTE);
-        vendingMachine.insertCoin(Cash.ONE_NOE);
+        vendingMachine.insertCoin(Cash.ONE_NOTE);
         vendingMachine.insertCoin(Cash.COIN);
 
         Bucket<Item, List<Cash>> bucket = vendingMachine.collectItemAndChange();
@@ -83,7 +82,7 @@ public class VendingMachineTest {
         long price = vendingMachine.selectItemAndGetPrice(Item.PEPSI);
         assertEquals(Item.PEPSI.getPrice(), price);
         vendingMachine.insertCoin(Cash.COIN);
-        vendingMachine.insertCoin(Cash.ONE_NOE);
+        vendingMachine.insertCoin(Cash.ONE_NOTE);
         vendingMachine.insertCoin(Cash.TWO_NOTE);
         vendingMachine.insertCoin(Cash.TWO_NOTE);
 
@@ -97,7 +96,7 @@ public class VendingMachineTest {
             vendingMachine.selectItemAndGetPrice(Item.SODA);
             vendingMachine.insertCoin(Cash.TWO_NOTE);
             vendingMachine.insertCoin(Cash.TWO_NOTE);
-            vendingMachine.insertCoin(Cash.ONE_NOE);
+            vendingMachine.insertCoin(Cash.ONE_NOTE);
             vendingMachine.printStats();
             vendingMachine.collectItemAndChange();
         }
@@ -109,7 +108,7 @@ public class VendingMachineTest {
             vendingMachine.selectItemAndGetPrice(Item.FANTA);
             vendingMachine.insertCoin(Cash.TWO_NOTE);
             vendingMachine.insertCoin(Cash.TWO_NOTE);
-            vendingMachine.insertCoin(Cash.ONE_NOE);
+            vendingMachine.insertCoin(Cash.ONE_NOTE);
             vendingMachine.collectItemAndChange();
 
             vendingMachine.selectItemAndGetPrice(Item.PEPSI);

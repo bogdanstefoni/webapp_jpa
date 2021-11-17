@@ -20,7 +20,7 @@ public class StudentController {
     }
 
     @GetMapping()
-    public ResponseEntity<String> getStudents() {
+    public ResponseEntity<?> getStudents() {
         return studentService.findAll();
     }
 

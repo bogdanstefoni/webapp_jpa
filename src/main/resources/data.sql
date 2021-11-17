@@ -11,3 +11,14 @@ CREATE TABLE `students`
     `update_date` timestamp,
     PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+CREATE TABLE `bank_inventory`
+(
+    `id`         int          NOT NULL AUTO_INCREMENT,
+    `item` varchar(128),
+    `version` bigint,
+    `create_date` timestamp,
+    `update_date` timestamp,
+
+    PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;

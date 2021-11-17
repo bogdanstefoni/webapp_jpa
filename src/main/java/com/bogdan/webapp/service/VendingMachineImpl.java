@@ -111,10 +111,10 @@ public class VendingMachineImpl implements IVendingMachine {
                     balance = balance - Cash.COIN.getValue();
                     continue;
 
-                } else if (balance >= Cash.ONE_NOE.getValue() && bankStorage.hasItem(
-                        Cash.ONE_NOE)) {
-                    changes.add(Cash.ONE_NOE);
-                    balance = balance - Cash.ONE_NOE.getValue();
+                } else if (balance >= Cash.ONE_NOTE.getValue() && bankStorage.hasItem(
+                        Cash.ONE_NOTE)) {
+                    changes.add(Cash.ONE_NOTE);
+                    balance = balance - Cash.ONE_NOTE.getValue();
                     continue;
 
                 } else if (balance >= Cash.TWO_NOTE.getValue() && bankStorage.hasItem(
@@ -124,7 +124,7 @@ public class VendingMachineImpl implements IVendingMachine {
                     continue;
                 } else {
                     throw new NotSufficientChangeException(
-                            "Not sufficient change," + "Please try another product");
+                            "Not sufficient change," + " Please try another product");
                 }
 
             }

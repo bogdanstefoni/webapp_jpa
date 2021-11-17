@@ -2,7 +2,7 @@ package com.bogdan.webapp.storage;
 
 public enum Cash {
 
-    COIN(5), ONE_NOE(10), TWO_NOTE(20);
+    COIN(5), ONE_NOTE(10), TWO_NOTE(20);
 
     private final int value;
 

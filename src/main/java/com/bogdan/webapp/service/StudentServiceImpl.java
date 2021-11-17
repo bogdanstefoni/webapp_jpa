@@ -41,7 +41,7 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
-    public ResponseEntity<String> findAll() {
+    public ResponseEntity<?> findAll() {
         List<Student> students = studentDao.findAll();
         List<StudentResponseDto> studentsResponseList = new ArrayList<>();
 
@@ -53,7 +53,7 @@ public class StudentServiceImpl implements StudentService {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("students", studentsResponseList);
 
-        return RestResponse.createSuccessResponse(jsonObject);
+      return  ResponseEntity.status(201).body(studentsResponseList);
     }
 
     @Override

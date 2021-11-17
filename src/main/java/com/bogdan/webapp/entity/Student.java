@@ -1,11 +1,9 @@
 package com.bogdan.webapp.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import org.apache.commons.lang3.StringUtils;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
-import javax.persistence.Transient;
+import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 
 @Entity
@@ -31,6 +29,10 @@ public class Student extends BaseEntity {
 
     @Transient
     private String fullName;
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JsonBackReference
+    private ClassRoom classRoom;
 
     public Student() {
     }
@@ -81,6 +83,14 @@ public class Student extends BaseEntity {
 
     public void setFullName(String fullName) {
         this.fullName = fullName;
+    }
+
+    public ClassRoom getClassRoom() {
+        return classRoom;
+    }
+
+    public void setClassRoom(ClassRoom classRoom) {
+        this.classRoom = classRoom;
     }
 
     @Override
