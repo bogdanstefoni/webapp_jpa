@@ -1,5 +1,7 @@
 package com.bogdan.webapp.dto;
 
+import com.bogdan.webapp.entity.ClassRoom;
+
 public class StudentResponseDto {
 
     private String firstName;
@@ -11,6 +13,8 @@ public class StudentResponseDto {
     private String username;
 
     private String jwtToken;
+
+    private ClassRoom classRoom;
 
     public String getFirstName() {
         return firstName;
@@ -50,5 +54,13 @@ public class StudentResponseDto {
 
     public void setJwtToken(String jwtToken) {
         this.jwtToken = jwtToken;
+    }
+
+    public ClassRoom getClassRoom() {
+        return classRoom;
+    }
+
+    public void setClassRoom(ClassRoom classRoom) {
+        this.classRoom = classRoom;
     }
 }

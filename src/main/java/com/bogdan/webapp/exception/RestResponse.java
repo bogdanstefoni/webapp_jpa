@@ -16,6 +16,7 @@ public class RestResponse {
     private static final String ERROR_DESCRIPTION = "errorDescription";
 
     public static ResponseEntity<String> createSuccessResponse(JSONObject jsonObject) {
+
         return createRestResponse(createResponse(jsonObject), HttpStatus.OK);
     }
 

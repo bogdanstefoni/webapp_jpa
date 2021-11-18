@@ -1,5 +1,6 @@
 package com.bogdan.webapp;
 
+import com.fasterxml.jackson.datatype.hibernate4.Hibernate4Module;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
@@ -26,5 +27,6 @@ public class WebAppApplication {
     public RequestContextListener requestContextListener() {
         return new RequestContextListener();
     }
+
 
 }
